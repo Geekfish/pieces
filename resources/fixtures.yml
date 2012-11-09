@@ -10,10 +10,10 @@ authors:
 
 posts:
     - title: "Hello World!"
-      text: "<em>Welcome to Pieces, the bestest blog engine ever!</em>"
+      content: "<em>Welcome to Pieces, the bestest blog engine ever!</em>"
       status: true
       author: 1
     - title: "Hello World!, again!"
-      text: "Something something blah blah <em>look, a velociraptor!</em>"
+      content: "Something something blah blah <em>look, a velociraptor!</em>"
       status: true
       author: 2

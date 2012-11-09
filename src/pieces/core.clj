@@ -1,22 +1,32 @@
 (ns pieces.core
-  (:require ring.adapter.jetty
+  (:use ring.adapter.jetty
         ring.middleware.resource
-        ring.util.response)
-  (:require net.cgrand.moustache))
+        ring.middleware.reload
+        ring.middleware.file
+        ring.middleware.params
+        ring.middleware.session
+        ring.middleware.session.cookie
+        net.cgrand.moustache
+        pieces.controller))
 
-;;; A simple handler to show send some response to the client.
-(defn index
-  [req]
-  (response "Welcome, to Pieces - A magical blog engine with lots of unicorns"))
 
 ;; Routes definition
 (def routes
   (app
-    [""] index))
- 
+    (wrap-file "resources/public")
+    (wrap-params)
+    (wrap-session {:cookie-name "pieces-session" :store (cookie-store)})
+    ["login"] (delegate login)
+    ["logout"] (delegate logout)
+    ["admin"] (delegate admin)
+    [""] (delegate index)
+    [id] (delegate post id)))
+
+
 ;;; start function for starting jetty
-(defn start
-([] (start 8080)) ; port - default to 8080
-([port] (run-jetty #'routes {:port port :join? false})))
+(defn start [port]
+  (run-jetty #'routes {:port (or port 8080) :join? false}))
 
-
+(defn -main []
+  (let [port (Integer/parseInt (System/getenv "PORT"))]
+    (start port)))

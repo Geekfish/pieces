@@ -25,8 +25,8 @@
 
 ;;; start function for starting jetty
 (defn start [port]
-  (run-jetty #'routes {:port (or port 8080) :join? false}))
+  (run-jetty #'routes {:port port :join? false}))
 
 (defn -main []
-  (let [port (Integer/parseInt (System/getenv "PORT"))]
+  (let [port (Integer/parseInt (or (System/getenv "PORT") "9000"))]
     (start port)))

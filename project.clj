@@ -11,4 +11,5 @@
                  [korma "0.2.1"]
                  [enlive "1.0.0"]
                  [postgresql "9.1-901.jdbc4"]
-                 [clj-yaml "0.3.1"]])
+                 [clj-yaml "0.3.1"]
+                 [digest "1.3.0"]])

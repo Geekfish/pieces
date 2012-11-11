@@ -1,19 +1,19 @@
-authors:
+users:
     - id: 1
       username:     "geekfish"
-      password:     "password"
+      password:     "5f4dcc3b5aa765d61d8327deb882cf99"
       email:        "contact@eleni.co"
     - id: 2
       username:     "velociraptor"
-      password:     "dinopassword"
+      password:     "5f4dcc3b5aa765d61d8327deb882cf99"
       email:        "velociraptor@eleni.co"
 
 posts:
     - title: "Hello World!"
       content: "<em>Welcome to Pieces, the bestest blog engine ever!</em>"
       status: true
-      author: 1
+      user: 1
     - title: "Hello World!, again!"
       content: "Something something blah blah <em>look, a velociraptor!</em>"
       status: true
-      author: 2
+      user: 2

@@ -15,15 +15,16 @@
    :user "pieces"
    :password "piecespass"})
 
-(defmigration add-authors-table
+(defmigration add-users-table
   ;; code be executed when migrating the schema "up" using "migrate"
   (up [] (create pieces-db
-           (table :authors (integer :id :primary-key :auto-inc)
+           (table :users (integer :id :primary-key :auto-inc)
              (varchar :username 100 :unique )
              (varchar :password 100 :not-null )
-             (varchar :email 255))))
+             (varchar :email 255 :unique))))
   ;; Code to be executed when migrating schema "down" using "rollback"
-  (down [] (drop (table :authors ))))
+  (down [] (drop (table :users ))))
+
 
 (defmigration add-posts-table
   (up [] (create pieces-db
@@ -33,5 +34,5 @@
              (boolean :status (default false))
              (timestamp :created (default (now)))
              (timestamp :published )
-             (integer :author [:refer :authors :id] :not-null))))
+             (integer :user [:refer :users :id] :not-null))))
   (down [] (drop (table :posts ))))

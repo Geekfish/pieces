@@ -16,5 +16,9 @@
    :user "pieces"
    :password "piecespass"})
 
-(defentity authors)
+(defentity users)
 (defentity posts)
+
+(defn user-by-username [username]
+  (first
+    (select users (where {:username username}))))

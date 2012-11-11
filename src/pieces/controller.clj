@@ -1,6 +1,8 @@
 (ns pieces.controller
   (:use pieces.templates
         pieces.models
+        pieces.authentication
+        pieces.debug
         ring.util.response
         korma.core))
 
@@ -16,6 +18,9 @@
     (->> (first (select posts (where {:id postId})))
       post-page response)))
 
+(defn password-valid? [username password]
+  (= (:password (user-by-username username))
+     (md5-encrypt password)))
 
 (defn login
   "Login Handler"
@@ -23,9 +28,12 @@
   (let [params (:params req)]
     (if (empty? params)
       (response (login-page))
-      (if (= (get params "username") (get params "password"))
-        (assoc (redirect "/admin") :session {:username (get params "username")})
-        (response (login-page "Invalid username or password"))))))
+      (let [username (get params "username")
+            password (get params "password")]
+        (if (password-valid? username password)
+          (let [user (user-by-username username)]
+            (assoc (redirect "/admin") :session {:user-id (:id user)}))
+          (response (login-page "Invalid username or password")))))))
 
 (defn logout
   "Logout handler"
@@ -35,15 +43,15 @@
 (defn admin
   "Admin handler"
   [req]
-  (let [username (:username (:session req))
+  (let [user-id (:user-id (:session req))
         params (:params req)]
-    (if (nil? username)
+    (if (nil? user-id)
       (redirect "/login")
       (do
         (if-not (empty? params)
           (let [id (inc (count (select posts)))
-                author-id (:id (first (select authors (fields :id) (where {:username username}))))]
+                user-id (:id (first (select users (fields :id) (where {:id user-id}))))]
             (insert posts (values (assoc params
                                     :id id
-                                    :author author-id)))))
+                                    :user user-id)))))
         (response (admin-page))))))
